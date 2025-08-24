@@ -1,0 +1,11 @@
+import { Button } from "@/components/ui/button";
+
+export default function Home() {
+  return (
+    <div>
+      Hi
+      <br/>
+      <Button>Dark Mode Aware Button</Button>
+    </div>
+  );
+}
