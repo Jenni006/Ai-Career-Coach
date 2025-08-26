@@ -2,10 +2,30 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
 import Image from "next/image";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 const HeroSection = () => {
-    const imageRef=useRef(); 
+    const imageRef=useRef(null); 
+
+    useEffect(() => {
+        const imageElement = imageRef.current;
+        
+        const handleScroll = () =>{
+            const scrollPosition = window.scrollY;
+            const scrollThreshold=100;
+
+            if(scrollPosition > scrollThreshold){
+                imageElement.classList.add("scrolled");
+            } else {
+                imageElement.classList.remove("scrolled");
+            }
+    
+        };
+
+        window.addEventListener("scroll",handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+
+    }, []);
 
 
   return (
@@ -31,11 +51,11 @@ const HeroSection = () => {
             </div>
 
             <div className="hero-image-wrapper mt-5 md:mt-0">
-                <div>
+                <div ref={imageRef} className="hero-image">
                     <Image
                     src={"/banner.jpg"}
-                    width={1280}
-                    height={720}
+                    width={1200}
+                    height={620}
                     alt="Banner MentorA"
                     className="rounder-lg shadow-2xl border mx-auto"
                     priority

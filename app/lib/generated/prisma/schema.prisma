@@ -1,0 +1,90 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(uuid())
+  clerkUserId String   @unique
+  email       String   @unique
+  name        String?
+  imageUrl    String?
+  bio         String?
+  experience  Int?
+  industry    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  skills         String[]
+  resume         Resume?
+  coverLetters   CoverLetter[]
+  mockInterviews MockInterview[]
+  skillGaps      SkillGapAnalysis[]
+
+  // relation with IndustryInsight
+  industryInsights IndustryInsight[] @relation("UserIndustries")
+}
+
+model Resume {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @unique
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model CoverLetter {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model MockInterview {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  questions Json // Store questions & answers
+  feedback  String?
+  createdAt DateTime @default(now())
+}
+
+model SkillGapAnalysis {
+  id              String   @id @default(cuid())
+  user            User     @relation(fields: [userId], references: [id])
+  userId          String
+  currentSkills   String[]
+  requiredSkills  String[]
+  gaps            String[]
+  recommendations String[]
+  createdAt       DateTime @default(now())
+}
+
+model IndustryInsight {
+  id                String   @id @default(cuid())
+  industry          String   @unique
+  salaryRanges      Json[]
+  growthRate        Float
+  demandLevel       String
+  topSkills         String[]
+  marketOutlook     String
+  keyTrends         String[]
+  recommendedSkills String[]
+  lastUpdated       DateTime @default(now())
+  nextUpdate        DateTime
+
+  // relation back to User
+  users User[] @relation("UserIndustries")
+}
