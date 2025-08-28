@@ -72,18 +72,23 @@ model SkillGapAnalysis {
   createdAt      DateTime @default(now())
 }
 
+
 model IndustryInsight {
   id                String   @id @default(cuid())
   industry          String   @unique
   salaryRanges      Json[]
   growthRate        Float
   demandLevel       String
+  automationRisk    String?
+  futureDemand      String?
   topSkills         String[]
-  marketOutlook     String
-  keyTrends         String[]
   recommendedSkills String[]
+  keyTrends         String[]
+  marketOutlook     String
+  source            String?
   lastUpdated       DateTime @default(now())
   nextUpdate        DateTime
+
 
   // relation back to User
   users User[] @relation("UserIndustries")
