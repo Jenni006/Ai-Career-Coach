@@ -130,3 +130,28 @@ export async function getUserOnboardingStatus() {
     return { isOnboarded: false };
   }
 }
+
+export async function getUserWithIndustry() {
+  try {
+    const { userId } = await auth();
+    if (!userId) {
+      return null;
+    }
+
+    const user = await db.user.findUnique({
+      where: { clerkUserId: userId },
+      select: { 
+        name: true,
+        industry: true,
+        experience: true,
+        skills: true,
+        bio: true 
+      },
+    });
+
+    return user;
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    return null;
+  }
+}

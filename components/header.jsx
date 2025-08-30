@@ -1,16 +1,15 @@
 import { SignedIn, SignInButton,UserButton, SignedOut } from "@clerk/nextjs";
 import Link from "next/link";
 import Image from "next/image";
-import {checkUser} from "@/lib/checkUser";
+import { checkUser } from "@/lib/checkUser";
 import { Button } from "./ui/button";
-import { ChevronDown, FileText, GraduationCap, LayoutDashboard, PenBox, StarIcon } from "lucide-react";
+import { ChevronDown, FileText, GraduationCap, LayoutDashboard, PenBox, StarIcon, Target, TrendingUp } from "lucide-react";
 import { DropdownMenu } from "./ui/dropdown-menu";
 import { DropdownMenuTrigger } from"./ui/dropdown-menu";
 import { DropdownMenuContent } from "./ui/dropdown-menu";
 import { DropdownMenuLabel } from "./ui/dropdown-menu";
 import { DropdownMenuItem } from "./ui/dropdown-menu";
 import { DropdownMenuSeparator } from "./ui/dropdown-menu";
-
 
 const Header = async() => {
   await checkUser();
@@ -25,7 +24,7 @@ const Header = async() => {
 
             <div className="flex items-center space-x-2 md:space-x-4">
               <SignedIn>
-                <Link href={'/dashboard'}>
+                <Link href={'/industry-insights'}>
                   <Button variant="outline">
                     <LayoutDashboard className="h-4 w-4"/>
                     <span className="hidden md:block">Industry Insights</span>
@@ -42,6 +41,18 @@ const Header = async() => {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
+                    <DropdownMenuItem>
+                      <Link href={"/skill-gap"} className="flex items-center gap-2">
+                        <Target className="h-4 w-4"/>
+                        Skill Gap Analysis
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link href={"/roadmap"} className="flex items-center gap-2">
+                        <TrendingUp className="h-4 w-4"/>
+                        Learning Roadmap
+                      </Link>
+                    </DropdownMenuItem>
                     <DropdownMenuItem>
                       <Link href={"/resume"} className="flex items-center gap-2">
                         <FileText className="h-4 w-4"/>

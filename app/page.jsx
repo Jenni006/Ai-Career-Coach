@@ -127,7 +127,7 @@ export default function Home() {
               Get personalized, AI-powered career guidance to achieve your goals faster.  
               Take the next step toward success with smart tools designed for you.
             </p>
-            <Link href="/dashboard" passHref>
+            <Link href="/onboarding" passHref>
               <Button
                 size="lg"
                 variant="secondary"
