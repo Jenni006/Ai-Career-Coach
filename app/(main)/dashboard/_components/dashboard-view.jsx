@@ -12,14 +12,34 @@ import {
 import FutureProofingDashboard from '@/components/FutureProofingDashboard';
 
 const DashboardView = ({ insights, userProfile, showFutureProofing = true }) => {
-  if (!insights) {
-    return (
-      <div className="p-6">
-        <h1 className="text-2xl font-bold mb-4">Industry Insights</h1>
-        <p>Loading insights...</p>
-      </div>
-    );
-  }
+  console.log("🎨 DashboardView rendering with insights:", !!insights);
+  console.log("📊 Full insights object:", insights);
+  console.log("👤 User profile:", userProfile);
+  console.log("🔮 Show future proofing:", showFutureProofing);
+  console.log("🟢 DashboardView mounted!");
+  console.log("🎨 Insights passed:", insights);
+  console.log("👤 User profile:", userProfile);
+  
+  // Fallback data when insights are not available
+  const fallbackInsights = {
+    growthRate: 15,
+    demandLevel: "MEDIUM",
+    marketOutlook: "Positive",
+    keyTrends: ["Digital Transformation", "Remote Work", "AI Integration", "Cloud Computing", "Cybersecurity"],
+    topSkills: ["Communication", "Problem Solving", "Leadership", "Technical Skills", "Adaptability"],
+    recommendedSkills: ["Data Analysis", "Project Management", "Digital Marketing", "Cloud Technologies"],
+    salaryRanges: [
+      { role: "Entry Level", min: 300000, median: 500000, max: 700000 },
+      { role: "Mid Level", min: 600000, median: 900000, max: 1200000 },
+      { role: "Senior Level", min: 1000000, median: 1500000, max: 2000000 }
+    ]
+  };
+
+  const displayInsights = insights || fallbackInsights;
+  const isUsingFallback = !insights;
+  
+  console.log("📊 Display insights:", displayInsights);
+  console.log("🔄 Using fallback:", isUsingFallback);
 
   return (
     <div className="p-6 space-y-6">
@@ -38,7 +58,7 @@ const DashboardView = ({ insights, userProfile, showFutureProofing = true }) => 
             <CardDescription className="text-gray-400">Industry growth percentage</CardDescription>
           </CardHeader>
           <CardContent>
-            <GrowthRateChart growthRate={insights.growthRate} />
+            <GrowthRateChart growthRate={displayInsights.growthRate} />
           </CardContent>
         </Card>
 
@@ -49,7 +69,7 @@ const DashboardView = ({ insights, userProfile, showFutureProofing = true }) => 
             <CardDescription className="text-gray-400">Current market demand</CardDescription>
           </CardHeader>
           <CardContent>
-            <DemandLevelChart demandLevel={insights.demandLevel} />
+            <DemandLevelChart demandLevel={displayInsights.demandLevel} />
           </CardContent>
         </Card>
 
@@ -60,7 +80,7 @@ const DashboardView = ({ insights, userProfile, showFutureProofing = true }) => 
             <CardDescription className="text-gray-400">Future market prediction</CardDescription>
           </CardHeader>
           <CardContent>
-            <MarketOutlookChart marketOutlook={insights.marketOutlook} />
+            <MarketOutlookChart marketOutlook={displayInsights.marketOutlook} />
           </CardContent>
         </Card>
 
@@ -71,7 +91,7 @@ const DashboardView = ({ insights, userProfile, showFutureProofing = true }) => 
             <CardDescription className="text-gray-400">Trend impact analysis</CardDescription>
           </CardHeader>
           <CardContent>
-            <TrendsChart keyTrends={insights.keyTrends} />
+            <TrendsChart keyTrends={displayInsights.keyTrends} />
           </CardContent>
         </Card>
 
@@ -82,7 +102,7 @@ const DashboardView = ({ insights, userProfile, showFutureProofing = true }) => 
                 <CardDescription className="text-gray-400">Compensation comparison</CardDescription>
             </CardHeader>
             <CardContent>
-                <SalaryChart salaryRanges={insights.salaryRanges} />
+                <SalaryChart salaryRanges={displayInsights.salaryRanges} />
             </CardContent>
         </Card>
 
@@ -94,7 +114,7 @@ const DashboardView = ({ insights, userProfile, showFutureProofing = true }) => 
           </CardHeader>
           <CardContent>
             <ul className="list-disc list-inside space-y-1 text-gray-300">
-              {insights.topSkills?.slice(0, 5).map((skill, index) => (
+              {displayInsights.topSkills?.slice(0, 5).map((skill, index) => (
                 <li key={index}>{skill}</li>
               ))}
             </ul>
@@ -109,7 +129,7 @@ const DashboardView = ({ insights, userProfile, showFutureProofing = true }) => 
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-2">
-              {insights.recommendedSkills?.map((skill, index) => (
+              {displayInsights.recommendedSkills?.map((skill, index) => (
                 <span key={index} className="bg-blue-500/20 text-blue-300 border border-blue-500/30 px-3 py-1 rounded-full text-sm">
                   {skill}
                 </span>
@@ -118,6 +138,15 @@ const DashboardView = ({ insights, userProfile, showFutureProofing = true }) => 
           </CardContent>
         </Card>
       </div>
+
+      {/* Data Source Indicator */}
+      {isUsingFallback && (
+        <div className="mt-6 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+          <p className="text-yellow-300 text-sm">
+            📊 Displaying sample data. Complete your profile to see personalized industry insights.
+          </p>
+        </div>
+      )}
     </div>
   );
 };

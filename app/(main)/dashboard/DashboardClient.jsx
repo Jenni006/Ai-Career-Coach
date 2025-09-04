@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import SkillGapAnalysis from "../../../components/SkillGapAnalysis";
 import DashboardView from "./_components/dashboard-view";
 import { generatePersonalizedSkillGap } from "../../lib/skillGapService";
-import { getIndustryInsights } from "@/actions/dashboard";
+import { getIndustryInsights } from "../../actions/dashboard";
 
 import { Loader2, RefreshCw, User } from "lucide-react";
 
@@ -47,10 +47,13 @@ export default function DashboardClient() {
 
   const loadIndustryInsights = async (industry) => {
     try {
+      console.log("🔍 Loading industry insights for:", industry);
       const insights = await getIndustryInsights(industry);
+      console.log("📊 Received insights:", insights);
+      console.log("📊 Insights structure:", JSON.stringify(insights, null, 2));
       setIndustryInsights(insights);
     } catch (error) {
-      console.error("Error loading industry insights:", error);
+      console.error("❌ Error loading industry insights:", error);
     }
   };
 
@@ -111,7 +114,7 @@ export default function DashboardClient() {
       </div>
 
       {/* Industry Insights Dashboard */}
-      <DashboardView insights={industryInsights} />
+      <DashboardView insights={industryInsights} userProfile={userData?.profile} />
     </div>
   );
 }

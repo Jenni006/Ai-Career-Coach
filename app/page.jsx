@@ -8,8 +8,25 @@ import { howitworks } from "@/data/howitworks";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ArrowRight} from "lucide-react";
 import Link from "next/link";
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+import { getUserOnboardingStatus } from "@/actions/user";
 
-export default function Home() {
+export default async function Home() {
+  // Check if user is signed in and onboarded
+  const user = await currentUser();
+  
+  if (user) {
+    const { isOnboarded } = await getUserOnboardingStatus();
+    
+    if (isOnboarded) {
+      // Redirect to dashboard if user is signed in and onboarded
+      redirect("/dashboard");
+    } else {
+      // Redirect to onboarding if user is signed in but not onboarded
+      redirect("/onboarding");
+    }
+  }
   return (
     <div>
       <div className="grid-background"></div>
@@ -18,7 +35,7 @@ export default function Home() {
 
       <section className="w-full py-12 md:24 lg:py-32 bg-background">
         <div className="container mx-auto px-4 md:px-6">
-          <h2 className="text-3xl font-bold tracking-tighter text--center mb-12">
+          <h2 className="text-3xl font-bold tracking-tighter text-center mb-12">
             Smart Solutions to Boost Your Career
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
@@ -127,7 +144,7 @@ export default function Home() {
               Get personalized, AI-powered career guidance to achieve your goals faster.  
               Take the next step toward success with smart tools designed for you.
             </p>
-            <Link href="/onboarding" passHref>
+            <Link href="/dashboard" passHref>
               <Button
                 size="lg"
                 variant="secondary"

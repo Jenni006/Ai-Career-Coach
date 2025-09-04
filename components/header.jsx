@@ -5,7 +5,7 @@ import { checkUser } from "@/lib/checkUser";
 import { Button } from "./ui/button";
 import { ChevronDown, FileText, GraduationCap, LayoutDashboard, PenBox, StarIcon, Target, TrendingUp } from "lucide-react";
 import { DropdownMenu } from "./ui/dropdown-menu";
-import { DropdownMenuTrigger } from"./ui/dropdown-menu";
+import { DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { DropdownMenuContent } from "./ui/dropdown-menu";
 import { DropdownMenuLabel } from "./ui/dropdown-menu";
 import { DropdownMenuItem } from "./ui/dropdown-menu";
@@ -16,7 +16,7 @@ const Header = async() => {
 
   return (
     <header className="fixed top-0 w-full border-b bg-background/80 backdrop-blur-md z-50 supports-[backdrop-filter]:bg-background/60" >
-        <nav className="conatiner mx-auto px-4 h-16 flex items-center justify justify-between">
+        <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
             <Link href="/">
                 <Image src="/MentorA logo.png" alt="MentorA Logo" width={200} height={60} className="h-12 py-1 w-auto object-contain"
                 />

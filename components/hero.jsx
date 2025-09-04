@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import Image from "next/image";
@@ -29,15 +29,15 @@ const HeroSection = () => {
 
 
   return (
-    <section className="w=full pt-36 md:pt-48 pb-10">
+    <section className="w-full pt-36 md:pt-48 pb-10">
         <div className="space-y-6 text-center">
             <div className="space-y-6 mx-auto">
-                <h1 className="text 5xl font-bold md:text-6xl lg:text-7xl xl:text-8xl gradient-title">
+                <h1 className="text-5xl font-bold md:text-6xl lg:text-7xl xl:text-8xl gradient-title">
                     Your AI Partner in Shaping
                     <br /> 
                     a Successful Career.
                 </h1>
-                <p className="mx-auto max-w-[600]px text-muted-foreground md:text-xl">
+                <p className="mx-auto max-w-[600px] text-muted-foreground md:text-xl">
                   Your AI Career Coach is designed to offer personalized job recommendations, 
                   resume and interview preparation, career roadmaps and 
                   guidance
@@ -57,7 +57,7 @@ const HeroSection = () => {
                     width={1200}
                     height={620}
                     alt="Banner MentorA"
-                    className="rounder-lg shadow-2xl border mx-auto"
+                    className="rounded-lg shadow-2xl border mx-auto"
                     priority
                     />
                 </div>

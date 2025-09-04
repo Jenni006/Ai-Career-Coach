@@ -27,8 +27,18 @@ export default async function IndustryInsightsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Industry Insights Dashboard */}
-      <DashboardView insights={industryInsights} userProfile={userData} showFutureProofing={false} />
+      {industryInsights ? (
+        <DashboardView 
+          insights={industryInsights} 
+          userProfile={userData} 
+          showFutureProofing={false} 
+        />
+      ) : (
+        <p className="text-center text-gray-400 p-6">
+          No insights available for your industry yet.
+        </p>
+      )}
     </div>
   );
+  
 }

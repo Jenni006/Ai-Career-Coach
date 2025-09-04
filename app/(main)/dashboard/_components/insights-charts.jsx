@@ -130,54 +130,6 @@ export const SalaryChart = ({ salaryRanges }) => {
 };
 
 // ----------------------- Skill Gap Analysis Chart -----------------------
-export const SkillGapChart = ({ skillGaps }) => {
-  if (!skillGaps || skillGaps.length === 0)
-    return <div className="p-4 text-center text-gray-400">No skill gap data available</div>;
-
-  const data = skillGaps.map((gap) => ({
-    skill: gap.skill,
-    gap: gap.required - gap.current,
-  }));
-
-  
-
-  return (
-    <CardWrapper>
-      <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 80 }}>
-          <defs>
-            <linearGradient id="skillGapLowGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor={colors.barMedian} />
-              <stop offset="100%" stopColor={colors.barMedianEnd} />
-            </linearGradient>
-            <linearGradient id="skillGapMediumGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor={colors.pieNeutral} />
-              <stop offset="100%" stopColor="#f59e0b" />
-            </linearGradient>
-            <linearGradient id="skillGapHighGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor={colors.pieNegative} />
-              <stop offset="100%" stopColor="#dc2626" />
-            </linearGradient>
-          </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-          <XAxis dataKey="skill" angle={-30} textAnchor="end" height={80} interval={0} tick={{ fill: "#f9fafb" }} />
-          <YAxis domain={[0, 100]} tick={{ fill: "#f9fafb" }} />
-          <Tooltip formatter={(value) => [`${value}%`, "Skill Gap"]} />
-          <Bar dataKey="gap" name="Skill Gap">
-            {data.map((entry, idx) => {
-              const gap = entry.gap;
-              let gradientId;
-              if (gap <= 20) gradientId = "skillGapLowGradient";
-              else if (gap <= 40) gradientId = "skillGapMediumGradient";
-              else gradientId = "skillGapHighGradient";
-              return <Cell key={idx} fill={`url(#${gradientId})`} />;
-            })}
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
-    </CardWrapper>
-  );
-};
 
 // ----------------------- Growth Rate Gauge -----------------------
 export const GrowthRateChart = ({ growthRate }) => {

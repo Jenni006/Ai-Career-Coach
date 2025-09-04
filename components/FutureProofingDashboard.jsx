@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from 'react';
 import { AlertTriangle, TrendingUp, Shield, Target, Clock, Brain, Zap, Loader2 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
