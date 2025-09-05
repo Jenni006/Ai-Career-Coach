@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Clock, BookOpen, ExternalLink, CheckCircle, Target, Lightbulb, Check } from 'lucide-react';
+import Link from 'next/link';
 
 const PersonalizedRoadmap = ({ learningPath, careerAdvice }) => {
   const [completedSteps, setCompletedSteps] = useState({});
@@ -17,6 +18,68 @@ const PersonalizedRoadmap = ({ learningPath, careerAdvice }) => {
       }
     }
   }, []);
+
+  // Function to determine if a resource is an external link or internal page
+  const getResourceLink = (resource) => {
+    const lowerResource = resource.toLowerCase();
+    
+    // Map common resource types to internal pages
+    if (lowerResource.includes('dashboard') || lowerResource.includes('analysis')) {
+      return '/dashboard';
+    }
+    if (lowerResource.includes('industry') || lowerResource.includes('insights')) {
+      return '/industry-insights';
+    }
+    if (lowerResource.includes('skill gap') || lowerResource.includes('gap analysis')) {
+      return '/skill-gap';
+    }
+    if (lowerResource.includes('ai cover letter') || lowerResource.includes('cover letter')) {
+      return '/ai-cover-letter';
+    }
+    
+    // External resource mappings
+    if (lowerResource.includes('coursera')) {
+      return 'https://www.coursera.org';
+    }
+    if (lowerResource.includes('udemy')) {
+      return 'https://www.udemy.com';
+    }
+    if (lowerResource.includes('youtube')) {
+      return 'https://www.youtube.com';
+    }
+    if (lowerResource.includes('github')) {
+      return 'https://github.com';
+    }
+    if (lowerResource.includes('documentation') || lowerResource.includes('docs')) {
+      return 'https://developer.mozilla.org';
+    }
+    if (lowerResource.includes('freecodecamp')) {
+      return 'https://www.freecodecamp.org';
+    }
+    if (lowerResource.includes('codecademy')) {
+      return 'https://www.codecademy.com';
+    }
+    if (lowerResource.includes('pluralsight')) {
+      return 'https://www.pluralsight.com';
+    }
+    if (lowerResource.includes('linkedin learning')) {
+      return 'https://www.linkedin.com/learning';
+    }
+    if (lowerResource.includes('edx')) {
+      return 'https://www.edx.org';
+    }
+    if (lowerResource.includes('khan academy')) {
+      return 'https://www.khanacademy.org';
+    }
+    
+    // Default to a search query if no specific mapping found
+    return `https://www.google.com/search?q=${encodeURIComponent(resource + ' tutorial')}`;
+  };
+
+  // Function to check if a link is external
+  const isExternalLink = (url) => {
+    return url.startsWith('http://') || url.startsWith('https://');
+  };
 
   const toggleStepCompletion = (stepIndex) => {
     const newCompletedSteps = {
@@ -119,12 +182,36 @@ const PersonalizedRoadmap = ({ learningPath, careerAdvice }) => {
                         Recommended Resources
                       </h5>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                        {step.resources.map((resource, resourceIndex) => (
-                          <div key={resourceIndex} className="flex items-center gap-2 text-sm text-gray-400 bg-gray-700/30 rounded-lg p-2 hover:bg-gray-600/40 transition-colors duration-200">
-                            <ExternalLink className="w-3 h-3 flex-shrink-0" />
-                            <span>{resource}</span>
-                          </div>
-                        ))}
+                        {step.resources.map((resource, resourceIndex) => {
+                          const resourceUrl = getResourceLink(resource);
+                          const isExternal = isExternalLink(resourceUrl);
+                          
+                          if (isExternal) {
+                            return (
+                              <a
+                                key={resourceIndex}
+                                href={resourceUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-2 text-sm text-blue-400 bg-gray-700/30 rounded-lg p-2 hover:bg-blue-900/40 hover:text-blue-300 transition-all duration-200 cursor-pointer group"
+                              >
+                                <ExternalLink className="w-3 h-3 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                                <span className="hover:underline">{resource}</span>
+                              </a>
+                            );
+                          } else {
+                            return (
+                              <Link
+                                key={resourceIndex}
+                                href={resourceUrl}
+                                className="flex items-center gap-2 text-sm text-purple-400 bg-gray-700/30 rounded-lg p-2 hover:bg-purple-900/40 hover:text-purple-300 transition-all duration-200 cursor-pointer group"
+                              >
+                                <ExternalLink className="w-3 h-3 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                                <span className="hover:underline">{resource}</span>
+                              </Link>
+                            );
+                          }
+                        })}
                       </div>
                     </div>
                   )}

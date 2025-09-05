@@ -1,5 +1,6 @@
-"use client";
-
+import { getIndustryInsights } from "@/actions/dashboard";
+import { getUserOnboardingStatus } from "@/actions/user";
+import { redirect } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   SalaryChart,
@@ -7,35 +8,35 @@ import {
   MarketOutlookChart,
   TrendsChart,
   DemandLevelChart,
-} from "./insights-charts";
-import FutureProofingDashboard from "@/components/FutureProofingDashboard";
+} from "../dashboard/_components/insights-charts";
 
-const DashboardView = ({ insights }) => {
-  if (!insights) {
+export default async function IndustryInsightsPage() {
+  try {
+    const { isOnboarded } = await getUserOnboardingStatus();
+
+    // If not onboarded, redirect to onboarding page
+    if (!isOnboarded) {
+      redirect("/onboarding");
+    }
+
+    const insights = await getIndustryInsights();
+
+    if (!insights) {
+      return (
+        <div className="container mx-auto p-6">
+          <h1 className="text-2xl font-bold mb-4">Industry Insights</h1>
+          <p>Loading insights...</p>
+        </div>
+      );
+    }
+
     return (
-      <div className="p-6">
-        <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-        <p>Loading insights...</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="p-6 space-y-8">
-      <h1 className="text-3xl font-bold">Career Dashboard</h1>
-      
-      {/* Future-Proofing Section */}
-      <div className="space-y-6">
-        <h2 className="text-2xl font-semibold">Future-Proofing Analysis</h2>
-        <FutureProofingDashboard userProfile={insights.userProfile} />
-      </div>
-
-      {/* Industry Insights Section */}
-      <div className="space-y-6">
-        <h2 className="text-2xl font-semibold">Industry Insights</h2>
+      <div className="container mx-auto p-6 space-y-6">
+        <h1 className="text-3xl font-bold">Industry Insights Dashboard</h1>
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Growth Rate Gauge */}
-          <Card className = " bg-transparent border-2 hover:border-primary transition-colors duration-300" >
+          <Card className="bg-transparent border-2 hover:border-primary transition-colors duration-300">
             <CardHeader>
               <CardTitle>Growth Rate</CardTitle>
               <CardDescription>Industry growth percentage</CardDescription>
@@ -68,7 +69,7 @@ const DashboardView = ({ insights }) => {
           </Card>
 
           {/* Trends Line Chart */}
-          <Card className="bg-transparent border-2 hover:border-primary transition-colors duration-300 md:col-span-2 ">
+          <Card className="bg-transparent border-2 hover:border-primary transition-colors duration-300 md:col-span-2">
             <CardHeader>
               <CardTitle>Key Trends Impact</CardTitle>
               <CardDescription>Trend impact analysis</CardDescription>
@@ -80,13 +81,13 @@ const DashboardView = ({ insights }) => {
 
           {/* Salary Ranges Bar Chart */}
           <Card className="bg-transparent border-2 hover:border-primary transition-colors duration-300 md:col-span-3">
-              <CardHeader>
-                  <CardTitle>Salary Ranges by Role</CardTitle>
-                  <CardDescription>Compensation comparison</CardDescription>
-              </CardHeader>
-              <CardContent>
-                  <SalaryChart salaryRanges={insights.salaryRanges} />
-              </CardContent>
+            <CardHeader>
+              <CardTitle>Salary Ranges by Role</CardTitle>
+              <CardDescription>Compensation comparison</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <SalaryChart salaryRanges={insights.salaryRanges} />
+            </CardContent>
           </Card>
 
           {/* Text-based insights */}
@@ -105,7 +106,7 @@ const DashboardView = ({ insights }) => {
           </Card>
 
           {/* Recommended Skills */}
-          <Card className="bg-transparent border-2 hover:border-primary transition-colors duration-300" >
+          <Card className="bg-transparent border-2 hover:border-primary transition-colors duration-300">
             <CardHeader>
               <CardTitle>Recommended Skills</CardTitle>
               <CardDescription>Skills to develop</CardDescription>
@@ -122,8 +123,15 @@ const DashboardView = ({ insights }) => {
           </Card>
         </div>
       </div>
-    </div>
-  );
-};
-
-export default DashboardView;
+    );
+  } catch (error) {
+    console.error("Industry insights error:", error);
+    return (
+      <div className="container mx-auto p-6">
+        <h1 className="text-2xl font-bold mb-4">Industry Insights</h1>
+        <p className="text-red-500">Error loading industry insights: {error.message}</p>
+        <p className="text-sm text-gray-500 mt-2">Please try refreshing the page.</p>
+      </div>
+    );
+  }
+}

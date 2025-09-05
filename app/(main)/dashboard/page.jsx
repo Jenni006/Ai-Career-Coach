@@ -1,7 +1,6 @@
-import { getIndustryInsights } from "@/actions/dashboard";
 import { getUserOnboardingStatus } from "@/actions/user";
 import { redirect } from "next/navigation";
-import DashboardView from "./_components/dashboard-view";
+import FutureProofingDashboard from "@/components/FutureProofingDashboard";
 
 export default async function DashboardPage() {
   try {
@@ -12,11 +11,10 @@ export default async function DashboardPage() {
       redirect("/onboarding");
     }
 
-    const insights = await getIndustryInsights();
-
     return (
-      <div className="container mx-auto">
-        <DashboardView insights={insights} />
+      <div className="container mx-auto p-6">
+        <h1 className="text-3xl font-bold mb-6">Future-Proofing Dashboard</h1>
+        <FutureProofingDashboard />
       </div>
     );
   } catch (error) {
