@@ -24,7 +24,7 @@ const Header = async() => {
 
             <div className="flex items-center space-x-2 md:space-x-4">
               <SignedIn>
-                <Link href={'/industry-insights'}>
+                <Link href={'/dashboard'}>
                   <Button variant="outline">
                     <LayoutDashboard className="h-4 w-4"/>
                     <span className="hidden md:block">Industry Insights</span>

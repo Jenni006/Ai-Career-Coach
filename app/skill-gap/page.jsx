@@ -32,15 +32,8 @@ export default function SkillGapPage() {
       setLoading(true);
       setShowForm(false);
       
-      // Convert user skills to the format expected by generateSkillGap
-      const currentSkills = formData.currentSkills.map(skill => skill.name);
-      
-      // Generate skill gap analysis
-      const data = await generateSkillGap(
-        formData.goalSpecialization,
-        currentSkills,
-        formData.currentSkills // Pass full skill objects for proficiency mapping
-      );
+      // Generate comprehensive skill gap analysis with new data structure
+      const data = await generateSkillGap(formData);
       
       // Save to localStorage for persistence
       localStorage.setItem('skillGapAnalysis', JSON.stringify(data));
@@ -84,7 +77,7 @@ export default function SkillGapPage() {
                   Skill Gap Analysis
                 </h1>
                   <div className="flex gap-3">
-                    {skillData?.learningPath && (
+                    {skillData?.roadmapPhases && (
                       <Button variant="outline" onClick={() => window.location.href = '/roadmap'}>
                         <TrendingUp className="h-4 w-4" />
                         View Roadmap

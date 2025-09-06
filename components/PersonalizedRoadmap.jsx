@@ -1,23 +1,29 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Clock, BookOpen, ExternalLink, CheckCircle, Target, Lightbulb, Check } from 'lucide-react';
 import Link from 'next/link';
 
-const PersonalizedRoadmap = ({ learningPath, careerAdvice }) => {
+const PersonalizedRoadmap = ({ learningPath, careerAdvice, storageScope = "default" }) => {
   const [completedSteps, setCompletedSteps] = useState({});
 
+  const stepsKey = useMemo(
+    () => `sg_stepsProgress:${storageScope}`,
+    [storageScope]
+  );
+
   useEffect(() => {
-    // Load progress from localStorage
-    const savedProgress = localStorage.getItem('roadmapProgress');
+    const savedProgress = localStorage.getItem(stepsKey);
     if (savedProgress) {
       try {
-        setCompletedSteps(JSON.parse(savedProgress));
+        setCompletedSteps(JSON.parse(savedProgress) || {});
       } catch (error) {
         console.error('Error loading progress:', error);
       }
+    } else {
+      setCompletedSteps({});
     }
-  }, []);
+  }, [stepsKey]);
 
   // Function to determine if a resource is an external link or internal page
   const getResourceLink = (resource) => {
@@ -38,56 +44,28 @@ const PersonalizedRoadmap = ({ learningPath, careerAdvice }) => {
     }
     
     // External resource mappings
-    if (lowerResource.includes('coursera')) {
-      return 'https://www.coursera.org';
-    }
-    if (lowerResource.includes('udemy')) {
-      return 'https://www.udemy.com';
-    }
-    if (lowerResource.includes('youtube')) {
-      return 'https://www.youtube.com';
-    }
-    if (lowerResource.includes('github')) {
-      return 'https://github.com';
-    }
-    if (lowerResource.includes('documentation') || lowerResource.includes('docs')) {
-      return 'https://developer.mozilla.org';
-    }
-    if (lowerResource.includes('freecodecamp')) {
-      return 'https://www.freecodecamp.org';
-    }
-    if (lowerResource.includes('codecademy')) {
-      return 'https://www.codecademy.com';
-    }
-    if (lowerResource.includes('pluralsight')) {
-      return 'https://www.pluralsight.com';
-    }
-    if (lowerResource.includes('linkedin learning')) {
-      return 'https://www.linkedin.com/learning';
-    }
-    if (lowerResource.includes('edx')) {
-      return 'https://www.edx.org';
-    }
-    if (lowerResource.includes('khan academy')) {
-      return 'https://www.khanacademy.org';
-    }
+    if (lowerResource.includes('coursera')) return 'https://www.coursera.org';
+    if (lowerResource.includes('udemy')) return 'https://www.udemy.com';
+    if (lowerResource.includes('youtube')) return 'https://www.youtube.com';
+    if (lowerResource.includes('github')) return 'https://github.com';
+    if (lowerResource.includes('documentation') || lowerResource.includes('docs')) return 'https://developer.mozilla.org';
+    if (lowerResource.includes('freecodecamp')) return 'https://www.freecodecamp.org';
+    if (lowerResource.includes('codecademy')) return 'https://www.codecademy.com';
+    if (lowerResource.includes('pluralsight')) return 'https://www.pluralsight.com';
+    if (lowerResource.includes('linkedin learning')) return 'https://www.linkedin.com/learning';
+    if (lowerResource.includes('edx')) return 'https://www.edx.org';
+    if (lowerResource.includes('khan academy')) return 'https://www.khanacademy.org';
     
     // Default to a search query if no specific mapping found
     return `https://www.google.com/search?q=${encodeURIComponent(resource + ' tutorial')}`;
   };
 
-  // Function to check if a link is external
-  const isExternalLink = (url) => {
-    return url.startsWith('http://') || url.startsWith('https://');
-  };
+  const isExternalLink = (url) => url.startsWith('http://') || url.startsWith('https://');
 
   const toggleStepCompletion = (stepIndex) => {
-    const newCompletedSteps = {
-      ...completedSteps,
-      [stepIndex]: !completedSteps[stepIndex]
-    };
-    setCompletedSteps(newCompletedSteps);
-    localStorage.setItem('roadmapProgress', JSON.stringify(newCompletedSteps));
+    const next = { ...completedSteps, [stepIndex]: !completedSteps[stepIndex] };
+    setCompletedSteps(next);
+    localStorage.setItem(stepsKey, JSON.stringify(next));
   };
 
   const getCompletionPercentage = () => {
@@ -96,9 +74,7 @@ const PersonalizedRoadmap = ({ learningPath, careerAdvice }) => {
     return Math.round((completed / learningPath.length) * 100);
   };
 
-  if (!learningPath || learningPath.length === 0) {
-    return null;
-  }
+  if (!learningPath || learningPath.length === 0) return null;
 
   return (
     <div className="space-y-6">

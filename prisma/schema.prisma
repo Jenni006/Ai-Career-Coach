@@ -62,14 +62,37 @@ model MockInterview {
 }
 
 model SkillGapAnalysis {
-  id             String   @id @default(cuid())
-  user           User     @relation(fields: [userId], references: [id])
-  userId         String
-  currentSkills  String[]
-  requiredSkills String[]
-  gaps           String[]
-  recommendations String[]
-  createdAt      DateTime @default(now())
+  id                String   @id @default(cuid())
+  user              User     @relation(fields: [userId], references: [id])
+  userId            String
+  
+  // Personal Information
+  currentAcademicYear String?
+  targetIndustry      String?
+  targetRole          String
+  experienceLevel     String // beginner, intermediate, advanced
+  
+  // Timeline & Commitment
+  timeline            String // 1month, 3months, 6months, 1year, 2years
+  intensityLevel      String // low, medium, high, intensive
+  hoursPerWeek        Int?
+  
+  // Skills Data
+  currentSkills       Json[] // [{name, category, currentLevel, targetLevel, priority}]
+  skillGaps           Json[] // [{skill, gap, priority, reasoning}]
+  
+  // Generated Roadmap
+  roadmapPhases       Json[] // [{phase, duration, skills, projects, resources, milestones}]
+  
+  // Progress Tracking
+  completedItems      Json[] // [{type, id, completedAt}]
+  progressPercentage  Float  @default(0)
+  
+  // Success Tips
+  personalizedTips    String[]
+  
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 }
 
 
