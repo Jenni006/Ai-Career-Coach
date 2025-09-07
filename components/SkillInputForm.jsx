@@ -217,10 +217,10 @@ const SkillInputForm = ({ onSubmit, loading }) => {
       {/* Header */}
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-400 via-purple-500 to-blue-600 bg-clip-text text-transparent mb-4">
-          Comprehensive Skill Gap Analysis
+          Personalize Your Skill Gap Analysis
         </h2>
         <p className="text-gray-400 text-lg">
-          AI-powered personalized roadmap generation based on your unique profile
+          Provide your skills and aspirations to get a tailored learning plan.
         </p>
       </div>
 
