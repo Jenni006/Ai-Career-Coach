@@ -159,31 +159,30 @@ const PersonalizedRoadmap = ({ learningPath, careerAdvice, storageScope = "defau
                       </h5>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                         {step.resources.map((resource, resourceIndex) => {
-                          const resourceUrl = getResourceLink(resource);
-                          const isExternal = isExternalLink(resourceUrl);
+                          const isExternal = resource.url.startsWith("http");
                           
                           if (isExternal) {
                             return (
                               <a
                                 key={resourceIndex}
-                                href={resourceUrl}
+                                href={resource.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-2 text-sm text-blue-400 bg-gray-700/30 rounded-lg p-2 hover:bg-blue-900/40 hover:text-blue-300 transition-all duration-200 cursor-pointer group"
                               >
                                 <ExternalLink className="w-3 h-3 flex-shrink-0 group-hover:scale-110 transition-transform" />
-                                <span className="hover:underline">{resource}</span>
+                                <span className="hover:underline">{resource.name}</span>
                               </a>
                             );
                           } else {
                             return (
                               <Link
                                 key={resourceIndex}
-                                href={resourceUrl}
+                                href={resource.url}
                                 className="flex items-center gap-2 text-sm text-purple-400 bg-gray-700/30 rounded-lg p-2 hover:bg-purple-900/40 hover:text-purple-300 transition-all duration-200 cursor-pointer group"
                               >
                                 <ExternalLink className="w-3 h-3 flex-shrink-0 group-hover:scale-110 transition-transform" />
-                                <span className="hover:underline">{resource}</span>
+                                <span className="hover:underline">{resource.name}</span>
                               </Link>
                             );
                           }

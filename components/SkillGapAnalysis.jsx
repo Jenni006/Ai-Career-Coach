@@ -243,17 +243,6 @@ const SkillGapAnalysis = ({ skillGapData: propData, loading = false }) => {
               );
             })}
           </div>
-
-          {/* Reset Progress */}
-          <div className="ml-auto pb-2">
-            <button
-              onClick={resetProgress}
-              className="text-sm px-3 py-1 rounded border border-gray-600 text-gray-300 hover:bg-gray-800"
-              title={`Clear saved progress for ${targetRole}`}
-            >
-              Reset Progress
-            </button>
-          </div>
         </div>
 
         {/* Tab Content */}
@@ -462,48 +451,62 @@ const SkillGapAnalysis = ({ skillGapData: propData, loading = false }) => {
                 )}
 
                 {/* Resources */}
-                {roadmapPhases[selectedPhase].resources && (
-                  <div className="bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50">
-                    <h4 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                      <BookOpen className="w-5 h-5 text-blue-400" />
-                      Learning Resources ({roadmapPhases[selectedPhase].resources.length})
-                    </h4>
-                    <div className="space-y-4">
-                      {roadmapPhases[selectedPhase].resources.map((resource, index) => (
-                        <div key={index} className="bg-gray-800/50 rounded-lg p-4">
-                          <div className="flex items-start justify-between mb-2">
-                            <div>
+                <div className="bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50">
+                  <h4 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <BookOpen className="w-5 h-5 text-blue-400" />
+                    Learning Resources ({roadmapPhases[selectedPhase].resources.length})
+                  </h4>
+                  <div className="space-y-4">
+                    {roadmapPhases[selectedPhase].resources.map((resource, index) => (
+                      <div key={index} className="bg-gray-800/50 rounded-lg p-4">
+                        <div className="flex items-start justify-between mb-2">
+                          <div>
+                            {resource.url ? (
+                              <a
+                                href={resource.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-2 text-white font-medium hover:text-blue-400 transition-colors"
+                              >
+                                {resource.name}
+                                <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-blue-400" />
+                              </a>
+                            ) : (
                               <h5 className="text-white font-medium flex items-center gap-2">
                                 {resource.name}
-                                {resource.url && <ExternalLink className="w-4 h-4 text-gray-400" />}
                               </h5>
-                              <p className="text-gray-400 text-sm capitalize">{resource.type}</p>
-                            </div>
-                            <button
-                              onClick={() => toggleItemCompletion('resource', selectedPhase, index)}
-                              className="text-gray-400 hover:text-green-400 transition-colors"
-                            >
-                              {completedItems.has(`resource-${selectedPhase}-${index}`) ? 
-                                <CheckSquare className="w-5 h-5 text-green-400" /> : 
-                                <Square className="w-5 h-5" />
-                              }
-                            </button>
+                            )}
+                            <p className="text-gray-400 text-sm capitalize">{resource.type}</p>
                           </div>
-                          <div className="flex items-center gap-4 text-sm text-gray-400">
-                            <span>⏱️ {resource.estimatedHours}h</span>
-                            <span className={`px-2 py-1 rounded text-xs ${
-                              resource.difficulty === 'beginner' ? 'bg-green-500/20 text-green-400' :
-                              resource.difficulty === 'intermediate' ? 'bg-yellow-500/20 text-yellow-400' :
-                              'bg-red-500/20 text-red-400'
-                            }`}>
-                              {resource.difficulty}
-                            </span>
-                          </div>
+                          <button
+                            onClick={() => toggleItemCompletion("resource", selectedPhase, index)}
+                            className="text-gray-400 hover:text-green-400 transition-colors"
+                          >
+                            {completedItems.has(`resource-${selectedPhase}-${index}`) ? (
+                              <CheckSquare className="w-5 h-5 text-green-400" />
+                            ) : (
+                              <Square className="w-5 h-5" />
+                            )}
+                          </button>
                         </div>
-                      ))}
-                    </div>
+                        <div className="flex items-center gap-4 text-sm text-gray-400">
+                          <span>⏱️ {resource.estimatedHours}h</span>
+                          <span
+                            className={`px-2 py-1 rounded text-xs ${
+                              resource.difficulty === "beginner"
+                                ? "bg-green-500/20 text-green-400"
+                                : resource.difficulty === "intermediate"
+                                ? "bg-yellow-500/20 text-yellow-400"
+                                : "bg-red-500/20 text-red-400"
+                            }`}
+                          >
+                            {resource.difficulty}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                )}
+                </div>
 
                 {/* Milestones */}
                 {roadmapPhases[selectedPhase].milestones && (
