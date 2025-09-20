@@ -10,6 +10,7 @@ import {
   DemandLevelChart,
 } from "./_components/insights-charts";
 
+export const dynamic = 'force-dynamic';
 export default async function DashboardPage() {
   // ✅ Check if user is onboarded
   const { isOnboarded } = await getUserOnboardingStatus();
