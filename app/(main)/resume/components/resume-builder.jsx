@@ -12,8 +12,7 @@ import {
   Save,
 } from "lucide-react";
 import { toast } from "sonner";
-import dynamic from "next/dynamic";
-const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
+import MDEditor from "@uiw/react-md-editor";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
@@ -24,6 +23,7 @@ import useFetch from "@/hooks/use-fetch";
 import { useUser } from "@clerk/nextjs";
 import { entriesToMarkdown } from "@/app/libs/helper";
 import { resumeSchema } from "@/app/libs/schema";
+
 
 export default function ResumeBuilder({ initialContent }) {
   const [activeTab, setActiveTab] = useState("edit");
@@ -112,33 +112,26 @@ export default function ResumeBuilder({ initialContent }) {
 
   const [isGenerating, setIsGenerating] = useState(false);
 
- const generatePDF = async () => {
-  if (typeof window === "undefined") return; // Make sure this runs only on client
+  const generatePDF = async () => {
+    setIsGenerating(true);
+    try {
+      const html2pdf = (await import("html2pdf.js")).default;
+      const element = document.getElementById("resume-pdf");
+      const opt = {
+        margin: [15, 15],
+        filename: "resume.pdf",
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+      };
 
-  setIsGenerating(true);
-  try {
-    // Dynamically import html2pdf only on client
-    const html2pdf = (await import("html2pdf.js/dist/html2pdf.min.js")).default;
-
-    const element = document.getElementById("resume-pdf");
-    if (!element) throw new Error("Resume element not found");
-
-    const opt = {
-      margin: [15, 15],
-      filename: "resume.pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-    };
-
-    await html2pdf().set(opt).from(element).save();
-  } catch (error) {
-    console.error("PDF generation error:", error);
-  } finally {
-    setIsGenerating(false);
-  }
-};
-
+      await html2pdf().set(opt).from(element).save();
+    } catch (error) {
+      console.error("PDF generation error:", error);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   const onSubmit = async (data) => {
     try {
@@ -157,9 +150,11 @@ export default function ResumeBuilder({ initialContent }) {
   return (
     <div data-color-mode="light" className="space-y-4">
       <div className="flex flex-col md:flex-row justify-between items-center gap-2">
-        <h1 className="font-bold gradient-title text-5xl md:text-6xl">
+        <h1 className="font-bold text-5xl md:text-6xl mb-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent">
           Resume Builder
         </h1>
+
+
         <div className="space-x-2">
           <Button
             variant="destructive"
@@ -178,19 +173,7 @@ export default function ResumeBuilder({ initialContent }) {
               </>
             )}
           </Button>
-          <Button onClick={generatePDF} disabled={isGenerating}>
-            {isGenerating ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin" />
-                Generating PDF...
-              </>
-            ) : (
-              <>
-                <Download className="h-4 w-4" />
-                Download PDF
-              </>
-            )}
-          </Button>
+          
         </div>
       </div>
 
