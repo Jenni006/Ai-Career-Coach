@@ -1,8 +1,11 @@
 import * as React from "react"
-
 import { cn } from "@/lib/utils"
 
-function Input({ className, type, ...props }) {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  className?: string
+}
+
+const Input: React.FC<InputProps> = ({ className, type = "text", ...props }) => {
   return (
     <input
       type={type}
