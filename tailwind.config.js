@@ -8,7 +8,5 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [
-    require("tw-animate-css") // your animation plugin
-  ],
+  plugins: [require("tw-animate-css")],
 };
