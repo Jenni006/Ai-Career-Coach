@@ -52,11 +52,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@types/node": "^20",
-    "@types/react": "^18.3.7",
-    "@types/react-dom": "^18.3.7",
     "eslint": "^9",
-    "eslint-config-next": "15.5.0",
-    "typescript": "^5.9.2"
+    "eslint-config-next": "15.5.0"
   }
 }
