@@ -110,28 +110,7 @@ export default function ResumeBuilder({ initialContent }) {
       .join("\n\n");
   };
 
-  const [isGenerating, setIsGenerating] = useState(false);
-
-  const generatePDF = async () => {
-    setIsGenerating(true);
-    try {
-      const html2pdf = (await import("html2pdf.js")).default;
-      const element = document.getElementById("resume-pdf");
-      const opt = {
-        margin: [15, 15],
-        filename: "resume.pdf",
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-      };
-
-      await html2pdf().set(opt).from(element).save();
-    } catch (error) {
-      console.error("PDF generation error:", error);
-    } finally {
-      setIsGenerating(false);
-    }
-  };
+  
 
   const onSubmit = async (data) => {
     try {
