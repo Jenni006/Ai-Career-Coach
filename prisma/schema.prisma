@@ -1,12 +1,8 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client-js"
-  output   = "../lib/generated/prisma"
+  provider      = "prisma-client-js"
+  output        = "../lib/generated/prisma"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+  engineType    = "node-api"
 }
 
 datasource db {
@@ -15,110 +11,89 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(uuid())
-  clerkUserId   String    @unique
-  email         String    @unique
-  name          String?
-  imageUrl      String?
-  bio           String?
-  experience    Int?
-  industry      String?
-  isOnboarded   Boolean   @default(false) 
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  skills        String[]
-  resume        Resume?
-  coverLetters  CoverLetter[]
-  mockInterviews MockInterview[]
-  skillGaps     SkillGapAnalysis[]
-
-  // relation with IndustryInsight
-  industryInsights IndustryInsight[] @relation("UserIndustries")
+  id               String             @id @default(uuid())
+  clerkUserId      String             @unique
+  email            String             @unique
+  name             String?
+  imageUrl         String?
+  bio              String?
+  experience       Int?
+  industry         String?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  skills           String[]
+  isOnboarded      Boolean            @default(false)
+  coverLetters     CoverLetter[]
+  mockInterviews   MockInterview[]
+  resume           Resume?
+  skillGaps        SkillGapAnalysis[]
+  industryInsights IndustryInsight[]  @relation("UserIndustries")
 }
 
 model Resume {
   id        String   @id @default(cuid())
-  user      User     @relation(fields: [userId], references: [id])
   userId    String   @unique
   content   String
   createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model CoverLetter {
-  id            String   @id @default(cuid())
-  user          User     @relation(fields: [userId], references: [id])
-  userId        String
-  content       String
-  companyName   String?
-  jobTitle      String?
+  id             String   @id @default(cuid())
+  userId         String
+  content        String
+  createdAt      DateTime @default(now())
+  companyName    String?
   jobDescription String?
-  status        String?   // e.g., "completed"
-  createdAt     DateTime @default(now())
+  jobTitle       String?
+  status         String?
+  user           User     @relation(fields: [userId], references: [id])
 }
-
 
 model MockInterview {
   id        String   @id @default(cuid())
-  user      User     @relation(fields: [userId], references: [id])
   userId    String
-  questions Json     // Store questions & answers
+  questions Json
   feedback  String?
   createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model SkillGapAnalysis {
-  id                String   @id @default(cuid())
-  user              User     @relation(fields: [userId], references: [id])
-  userId            String
-  
-  // Personal Information
+  id                  String   @id @default(cuid())
+  userId              String
+  createdAt           DateTime @default(now())
+  completedItems      Json[]
   currentAcademicYear String?
+  experienceLevel     String
+  hoursPerWeek        Int?
+  intensityLevel      String
+  personalizedTips    String[]
+  progressPercentage  Float    @default(0)
+  roadmapPhases       Json[]
+  skillGaps           Json[]
   targetIndustry      String?
   targetRole          String
-  experienceLevel     String // beginner, intermediate, advanced
-  
-  // Timeline & Commitment
-  timeline            String // 1month, 3months, 6months, 1year, 2years
-  intensityLevel      String // low, medium, high, intensive
-  hoursPerWeek        Int?
-  
-  // Skills Data
-  currentSkills       Json[] // [{name, category, currentLevel, targetLevel, priority}]
-  skillGaps           Json[] // [{skill, gap, priority, reasoning}]
-  
-  // Generated Roadmap
-  roadmapPhases       Json[] // [{phase, duration, skills, projects, resources, milestones}]
-  
-  // Progress Tracking
-  completedItems      Json[] // [{type, id, completedAt}]
-  progressPercentage  Float  @default(0)
-  
-  // Success Tips
-  personalizedTips    String[]
-  
-  createdAt           DateTime @default(now())
+  timeline            String
   updatedAt           DateTime @updatedAt
+  currentSkills       Json[]
+  user                User     @relation(fields: [userId], references: [id])
 }
-
 
 model IndustryInsight {
   id                String   @id @default(cuid())
   industry          String   @unique
   salaryRanges      Json[]
   growthRate        Float
-  demandLevel       String
-  automationRisk    String?
-  futureDemand      String?
   topSkills         String[]
-  recommendedSkills String[]
-  keyTrends         String[]
   marketOutlook     String
-  source            String?
+  keyTrends         String[]
+  recommendedSkills String[]
   lastUpdated       DateTime @default(now())
   nextUpdate        DateTime
-
-
-  // relation back to User
-  users User[] @relation("UserIndustries")
+  automationRisk    String?
+  futureDemand      String?
+  source            String?
+  demandLevel       String
+  users             User[]   @relation("UserIndustries")
 }

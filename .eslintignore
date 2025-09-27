@@ -1,0 +1,19 @@
+# Ignore node_modules
+node_modules/
+
+# Ignore build output
+.next/
+out/
+dist/
+
+# Ignore Prisma generated files
+lib/generated/**
+
+# Ignore environment files
+.env
+.env.local
+.env.development
+.env.production
+
+# Optional: ignore logs
+*.log
