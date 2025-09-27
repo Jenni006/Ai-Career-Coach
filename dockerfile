@@ -68,4 +68,4 @@ ENV NODE_ENV=production
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "next start -p $PORT"]
+CMD ["npm", "start"]
