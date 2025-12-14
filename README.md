@@ -1,4 +1,4 @@
-# AI Career Coach — concise README
+# AI Career Coach 
 
 AI Career Coach is an AI-driven career guidance platform built with Next.js (TypeScript) and Prisma. It provides personalized recommendations, learning roadmaps, and AI-assisted content (resume/cover letters) through a simple web UI and API surface.
 
